@@ -44,7 +44,7 @@ function GamePage() {
   useEffect(() => {
     if (!username || wsRef.current) return;
 
-    const socket = new WebSocket("ws://10.30.118.200:8080/ws");
+    const socket = new WebSocket("wss://emitrrconnect4.onrender.com/ws");
     wsRef.current = socket;
 
     socket.onopen = () => {
