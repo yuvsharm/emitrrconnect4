@@ -1,0 +1,342 @@
+/* --- Global Styles --- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  overflow: hidden; 
+  height: 100vh;
+  width: 100vw;
+  position: fixed; 
+}
+
+/* --- Start Page --- */
+.start-page {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+  color: #fff;
+  text-align: center;
+  position: relative;
+  background: linear-gradient(270deg, #1f4037, #99f2c8, #ff4e50, #f9d423);
+  background-size: 800% 800%;
+  animation: gradientBG 20s ease infinite;
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.title {
+  font-size: clamp(2rem, 8vw, 3rem);
+  margin-bottom: 20px;
+  text-shadow: 3px 3px 15px rgba(0,0,0,0.6);
+}
+
+.start-box {
+  display: flex;
+  gap: 10px;
+  background: rgba(0,0,0,0.3);
+  padding: 15px 25px;
+  border-radius: 12px;
+  backdrop-filter: blur(5px);
+}
+
+.username-input {
+  padding: 10px 15px;
+  border-radius: 6px;
+  border: none;
+  font-size: 16px;
+  outline: none;
+}
+
+.start-btn {
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: none;
+  background-color: #ff9800;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+/* --- Game Page --- */
+.game-page {
+  height: 100vh;
+  width: 100vw;
+  background: radial-gradient(circle at center, #1a2a33 0%, #0a0f12 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px;
+  color: white;
+  overflow: hidden;
+  border: 6px solid #2c3e50;
+  box-sizing: border-box;
+}
+
+.game-title {
+  font-size: clamp(1rem, 5vw, 2.2rem);
+  margin: 5px 0 2px 0;
+  text-shadow: 0 0 10px rgba(255,215,0,0.5);
+}
+
+.timer {
+  font-size: 14px;
+  color: #ffd700;
+  margin-bottom: 5px;
+}
+
+/* --- Layout --- */
+.game-layout {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+}
+
+/* --- Grid Wrapper --- */
+.grid-wrapper {
+  background: rgba(255, 255, 255, 0.03);
+  padding: clamp(8px, 2vw, 15px);
+  border-radius: 20px;
+  border: 3px solid #ff9800;
+  display: flex;
+  justify-content: center;
+  box-shadow: 0 0 25px rgba(255, 152, 0, 0.3), inset 0 0 15px rgba(0,0,0,0.5);
+  position: relative;
+}
+
+.grid-wrapper::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
+  pointer-events: none;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, clamp(28px, 9vw, 55px));
+  grid-template-rows: repeat(6, clamp(28px, 9vw, 55px));
+  gap: clamp(4px, 1.2vw, 8px);
+  z-index: 1;
+}
+
+/* --- Player Cards --- */
+.player-card {
+  background: rgba(255,255,255,0.05);
+  padding: 10px;
+  border-radius: 12px;
+  text-align: center;
+  width: clamp(80px, 15vw, 130px);
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.player-card.active {
+  box-shadow: 0 0 15px #ffd700;
+  border-color: #ffd700;
+  background: rgba(255, 215, 0, 0.1);
+  transform: scale(1.05);
+}
+
+.avatar {
+  width: clamp(35px, 10vw, 70px);
+  height: clamp(35px, 10vw, 70px);
+  border-radius: 50%;
+  margin-bottom: 5px;
+  object-fit: cover;
+  border: 2px solid white;
+}
+
+.symbol { font-weight: bold; font-size: 16px; }
+.symbol.x { color: #00d2ff; }
+.symbol.o { color: #f2994a; }
+
+/* --- Cells --- */
+.cell {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+  transition: all 0.2s;
+}
+
+.cell span {
+  font-size: clamp(20px, 6vw, 36px);
+  font-weight: 900;
+}
+
+.cell span.x { 
+  color: #00d2ff;
+  text-shadow: 0 0 10px rgba(0, 210, 255, 0.8), 0 0 20px rgba(0, 210, 255, 0.4);
+}
+.cell span.o { 
+  color: #ff007f;
+  text-shadow: 0 0 10px rgba(255, 0, 127, 0.8), 0 0 20px rgba(255, 0, 127, 0.4);
+}
+
+/* --- WINNING CONDITION EFFECT (HIGHLIGHT & SHINE) --- */
+.win-cell {
+  background: linear-gradient(135deg, #ffd700, #ffae00) !important;
+  box-shadow: 0 0 30px #ffd700, inset 0 0 10px #fff !important;
+  border: 2px solid #fff !important;
+  animation: winPulse 0.8s infinite alternate, winShine 2s infinite;
+  z-index: 10;
+}
+
+@keyframes winPulse {
+  from { transform: scale(1); filter: brightness(1); }
+  to { transform: scale(1.15); filter: brightness(1.3); }
+}
+
+@keyframes winShine {
+  0% { box-shadow: 0 0 20px #ffd700; }
+  50% { box-shadow: 0 0 40px #ffea00, 0 0 60px rgba(255,255,255,0.5); }
+  100% { box-shadow: 0 0 20px #ffd700; }
+}
+
+.win-cell span {
+  color: #000 !important;
+  text-shadow: none !important;
+}
+
+/* --- FOOTER BUTTONS --- */
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(8px, 2vw, 15px);
+  padding: 10px 10px 30px 10px;
+  width: 100%;
+  flex-wrap: wrap;
+  z-index: 100;
+}
+
+.back-btn, .new-game-btn, .undo-btn, .resume-btn {
+  padding: clamp(8px, 1.5vh, 12px) clamp(16px, 3vw, 25px);
+  color: #fff;
+  font-weight: 800;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: clamp(10px, 1.3vh, 13px);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.back-btn { background: linear-gradient(45deg, #ff416c, #ff4b2b); }
+.new-game-btn { background: linear-gradient(45deg, #00b09b, #96c93d); }
+.undo-btn { background: linear-gradient(45deg, #2193b0, #6dd5ed); }
+.resume-btn { background: linear-gradient(45deg, #f093fb, #f5576c); }
+
+/* --- CONGRATULATIONS POPUP --- */
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  backdrop-filter: blur(8px);
+}
+
+.popup-card {
+  background: linear-gradient(135deg, #1e2931, #0a0f12);
+  padding: clamp(20px, 5vw, 40px);
+  border-radius: 30px;
+  text-align: center;
+  border: 4px solid #ffd700;
+  box-shadow: 0 0 50px rgba(255, 215, 0, 0.3), inset 0 0 20px rgba(0,0,0,0.5);
+  max-width: 90%;
+  animation: popupSlide 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popupSlide {
+  from { transform: scale(0.5); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.popup-card h2 {
+  font-size: clamp(1.5rem, 6vw, 2.5rem);
+  color: #ffd700;
+  margin-bottom: 10px;
+  text-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.popup-card p {
+  font-size: 1.2rem;
+  margin-bottom: 25px;
+  color: #fff;
+}
+
+/* --- EFFECTIVE PLAY AGAIN BUTTON --- */
+.play-again-btn {
+  padding: 15px 35px;
+  font-size: 18px;
+  font-weight: 800;
+  color: #000;
+  background: #ffd700;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+  animation: pulseButton 2s infinite;
+}
+
+@keyframes pulseButton {
+  0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); }
+  70% { box-shadow: 0 0 0 20px rgba(255, 215, 0, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+}
+
+/* --- Alternating Cell Colors --- */
+.cell:nth-child(7n+1), .cell:nth-child(7n+3), .cell:nth-child(7n+5), .cell:nth-child(7n+7) { 
+  background: rgba(15, 23, 30, 0.6); 
+}
+.cell:nth-child(7n+2), .cell:nth-child(7n+4), .cell:nth-child(7n+6) { 
+  background: rgba(30, 41, 51, 0.6); 
+}
+
+/* --- Responsive --- */
+@media (max-width: 800px) {
+  .game-page { border: 3px solid #2c3e50; }
+  .game-layout { flex-direction: column; gap: 8px; }
+  .player-card { flex-direction: row; width: 90%; height: 45px; justify-content: center; gap: 15px; }
+  .grid {
+    grid-template-columns: repeat(7, clamp(25px, 11vw, 40px));
+    grid-template-rows: repeat(6, clamp(25px, 11vw, 40px));
+  }
+}
