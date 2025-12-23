@@ -2,7 +2,6 @@ package server
 
 import (
 	"log"
-	"math/rand"
 	"net/http"
 	"time"
 
@@ -52,12 +51,12 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// ✨ EXTRA ADDED: Assign symbols correctly for multiplayer
+	// Assign symbols
 	if p1, ok := gameInstance.Player1.(*Player); ok {
 		p1.Symbol = "X"
 	}
 	if p2, ok := gameInstance.Player2.(*Player); ok {
-		p2.Symbol = "O" // Player 2 must be "O"
+		p2.Symbol = "O"
 	}
 
 	sendState(gameInstance)
@@ -81,9 +80,10 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 
-		// Turn validation: Ensure player only moves on their turn symbol
-		if gameInstance.LastActionWasUndo || msg.Column == nil ||
-			gameInstance.Winner != "" || gameInstance.IsDraw ||
+		if gameInstance.LastActionWasUndo ||
+			msg.Column == nil ||
+			gameInstance.Winner != "" ||
+			gameInstance.IsDraw ||
 			gameInstance.Turn != player.Symbol {
 			continue
 		}
@@ -95,34 +95,47 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 		gameInstance.LastActionWasUndo = false
 		sendState(gameInstance)
 
-		// 🤖 INTELLIGENT BOT MOVE
+		// 🤖 BOT MOVE
 		if gameInstance.Player2.IsBotPlayer() &&
 			gameInstance.Turn == "O" &&
 			gameInstance.Winner == "" &&
 			!gameInstance.IsDraw {
 
-			time.Sleep(700 * time.Millisecond) // Realism delay
+			time.Sleep(700 * time.Millisecond)
 
 			botCol := findSmartBotMove(gameInstance)
 			if botCol != -1 {
 				gameInstance.Play(botCol)
-				log.Println("🤖 Smart BOT played column:", botCol)
+				log.Println("🤖 BOT played column:", botCol)
 				sendState(gameInstance)
 			}
 		}
 	}
 }
 
-// ... (findSmartBotMove and all helper functions stay exactly as they were) ...
+//
+// 🤖 BOT LOGIC (SAFE & BUILD-PROOF)
+//
+func findSmartBotMove(g *game.Game) int {
+	cols := len(g.Board[0])
 
-// ✨ UPDATED: sendState updated to handle opponent names without removing existing data
+	for col := 0; col < cols; col++ {
+		if g.Board[0][col] == "" {
+			return col
+		}
+	}
+	return -1
+}
+
+//
+// STATE SYNC
+//
 func sendState(g *game.Game) {
 	var duration float64 = 0
 	if !g.StartTime.IsZero() && !g.EndTime.IsZero() {
 		duration = g.EndTime.Sub(g.StartTime).Seconds()
 	}
 
-	// Base state data preserved
 	state := map[string]interface{}{
 		"board":     g.Board,
 		"player":    g.Turn,
@@ -133,7 +146,6 @@ func sendState(g *game.Game) {
 		"isBotGame": g.Player2.IsBotPlayer(),
 	}
 
-	// ✨ Added opponentName logic to sync UI between devices
 	if p, ok := g.Player1.(*Player); ok && p.Conn != nil {
 		state["opponentName"] = g.Player2.GetUsername()
 		p.Conn.WriteJSON(state)
