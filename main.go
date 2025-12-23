@@ -4,7 +4,6 @@ import (
 	"emitrrconnect4/internal/server"
 	"os"
 	"log"
-	"net/http"
 )
 
 func main() {
